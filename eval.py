@@ -6,7 +6,11 @@ import time
 import torch
 from torchvision.transforms import ToPILImage
 from PIL import Image
+import cv2
+ 
 
+import matplotlib.pyplot as plt
+from google.colab.patches import cv2_imshow
 from dataloaders import make_data_loader
 from dataloaders.utils import decode_seg_map_sequence, Colorize
 from utils.metrics import Evaluator
@@ -62,7 +66,20 @@ class Validator(object):
             with torch.no_grad():
                 if self.args.depth:
                     output = self.model(image, depth)
-                    
+                    print("@"*100)
+                    print(output.shape)
+                    # normalized_masks = torch.nn.functional.softmax(output,dim=1)
+                    # print(normalized_masks.shape)
+                    c=torch.max(output,1).values.squeeze().cpu().numpy()
+                    c*=12
+                    plt.imshow(c)
+                    #cv2.imwrite("sakr",c)
+                    im=Image.fromarray(np.uint8(c))
+                    im.save("badran.png")
+                    #o.save("badran")
+
+
+
                 else:
                     output = self.model(image)
             if self.args.cuda:
@@ -79,9 +96,17 @@ class Validator(object):
             pre_colors = Colorize()(torch.max(output, 1)[1].detach().cpu().byte())
             # save
             for i in range(pre_colors.shape[0]):
-
-                merge_label_name = os.path.join(self.args.merge_label_save_path + self.args.weight_path.split('run/')[1], image_name[i].split('val\\')[1])
-
+                # print("%"*100)
+                # print(i)
+                # print("%"*100)
+                # print(self.args.merge_label_save_path)
+                # print("%"*100)
+                # print(self.args.weight_path.split('run/'))
+                # print("%"*100)
+                # print(merge_label_name)
+                merge_label_name = os.path.join(self.args.merge_label_save_path + self.args.weight_path.split('run/')[0], image_name[i].split('val\\')[0])
+                print("%"*100)
+                print(merge_label_name)
                 pre_color_image = ToPILImage()(pre_colors[i])  # pre_colors.dtype = float64
 
                 if (self.args.merge):
@@ -145,9 +170,9 @@ def main():
                         help='set the checkpoint name')
     parser.add_argument('--weight-path', type=str, default=None,
                         help='enter your path of the weight')
-    parser.add_argument('--label-save-path', type=str, default='E:/RFNet/test/label/',
+    parser.add_argument('--label-save-path', type=str, default='/content/RFNet/label/',
                         help='path to save label')
-    parser.add_argument('--merge-label-save-path', type=str, default='E:/RFNet/test/merge/',
+    parser.add_argument('--merge-label-save-path', type=str, default='/content/RFNet/merge/',
                         help='path to save merged label')
     parser.add_argument('--merge', action='store_true', default=False, help='merge image and label')
     parser.add_argument('--depth', action='store_true', default=False, help='add depth image or not')
