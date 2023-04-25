@@ -20,8 +20,8 @@ class CitylostfoundSegmentation(data.Dataset):
         self.disparities = {}
         self.labels = {}
 
-        self.images_base = os.path.join(self.root, 'leftImg8bit', self.split)
-        self.disparities_base = os.path.join(self.root,'disparity',self.split)
+        self.images_base = "/content/drive/MyDrive/Graduation_Project/RGBD/image"
+        self.disparities_base = "/content/drive/MyDrive/Graduation_Project/RGBD/disparity"
         self.annotations_base = os.path.join(self.root, 'gtFine', self.split)
 
         self.images[split] = self.recursive_glob(rootdir=self.images_base, suffix= '.png')
