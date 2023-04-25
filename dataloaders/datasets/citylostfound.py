@@ -18,11 +18,9 @@ class CitylostfoundSegmentation(data.Dataset):
         self.args = args
         self.images = {}
         self.disparities = {}
-        self.labels = {}
 
         self.images_base = "/content/drive/MyDrive/Graduation_Project/RGBD/image"
         self.disparities_base = "/content/drive/MyDrive/Graduation_Project/RGBD/disparity"
-        self.annotations_base = os.path.join(self.root, 'gtFine', self.split)
 
         self.images[split] = self.recursive_glob(rootdir=self.images_base, suffix= '.png')
         self.images[split].sort()
@@ -30,9 +28,7 @@ class CitylostfoundSegmentation(data.Dataset):
         self.disparities[split] = self.recursive_glob(rootdir=self.disparities_base, suffix= '.png')
         self.disparities[split].sort()
 
-        self.labels[split] = self.recursive_glob(rootdir=self.annotations_base,
-                                                 suffix='labelTrainIds.png')
-        self.labels[split].sort()
+        
 
         self.ignore_index = 255
 
@@ -53,7 +49,6 @@ class CitylostfoundSegmentation(data.Dataset):
 
         img_path = self.images[self.split][index].rstrip()
         disp_path = self.disparities[self.split][index].rstrip()
-        lbl_path = self.labels[self.split][index].rstrip()
 
         _img = Image.open(img_path).convert('RGB')
         _depth = Image.open(disp_path)
@@ -144,7 +139,6 @@ class CitylostfoundSegmentation_rgb(data.Dataset):
         self.split = split
         self.args = args
         self.files = {}
-        self.labels = {}
 
         self.images_base = os.path.join(self.root, 'leftImg8bit', self.split)
         self.annotations_base = os.path.join(self.root, 'gtFine', self.split)
@@ -152,8 +146,6 @@ class CitylostfoundSegmentation_rgb(data.Dataset):
         self.files[split] = self.recursive_glob(rootdir=self.images_base, suffix='.png')
         self.files[split].sort()
 
-        self.labels[split] = self.recursive_glob(rootdir=self.annotations_base, suffix='labelTrainIds.png')
-        self.labels[split].sort()
 
         self.ignore_index = 255
 
@@ -168,7 +160,6 @@ class CitylostfoundSegmentation_rgb(data.Dataset):
     def __getitem__(self, index):
 
         img_path = self.files[self.split][index].rstrip()
-        lbl_path = self.labels[self.split][index].rstrip()
         _img = Image.open(img_path).convert('RGB')
         _tmp = np.array(Image.open(lbl_path), dtype=np.uint8)
         if self.split == 'train':
