@@ -51,9 +51,9 @@ class Validator(object):
         for i, (sample, image_name) in enumerate(tbar):
 
             if self.args.depth:
-                image, depth, target = sample['image'], sample['depth'], sample['label']
+                image, depth = sample['image'], sample['depth']
             else:
-                image, target = sample['image'], sample['label']
+                image = sample['image']
             if self.args.cuda:
                 image = image.cuda()
                 if self.args.depth:
@@ -62,6 +62,7 @@ class Validator(object):
             with torch.no_grad():
                 if self.args.depth:
                     output = self.model(image, depth)
+                    
                 else:
                     output = self.model(image)
             if self.args.cuda:
@@ -79,13 +80,9 @@ class Validator(object):
             # save
             for i in range(pre_colors.shape[0]):
 
-                label_name = os.path.join(self.args.label_save_path + self.args.weight_path.split('run/')[1], image_name[i].split('val\\')[1])
                 merge_label_name = os.path.join(self.args.merge_label_save_path + self.args.weight_path.split('run/')[1], image_name[i].split('val\\')[1])
-                os.makedirs(os.path.dirname(label_name), exist_ok=True)
-                os.makedirs(os.path.dirname(merge_label_name), exist_ok=True)
 
                 pre_color_image = ToPILImage()(pre_colors[i])  # pre_colors.dtype = float64
-                pre_color_image.save(label_name)
 
                 if (self.args.merge):
                     image_merge(image_name[i], pre_color_image,merge_label_name)
