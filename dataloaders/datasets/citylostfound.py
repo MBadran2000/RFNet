@@ -52,19 +52,7 @@ class CitylostfoundSegmentation(data.Dataset):
 
         _img = Image.open(img_path).convert('RGB')
         _depth = Image.open(disp_path)
-        _tmp = np.array(Image.open(lbl_path), dtype=np.uint8)
-        if self.split == 'train':
-            if index < 1036:  # lostandfound
-                _tmp = self.relabel_lostandfound(_tmp)
-            else:  # cityscapes
-                pass
-        elif self.split == 'val':
-            if index < 1203:  # lostandfound
-                _tmp = self.relabel_lostandfound(_tmp)
-            else:  # cityscapes
-                pass
-        _target = Image.fromarray(_tmp)
-
+        
         sample = {'image': _img, 'depth': _depth, 'label': _target}
 
         # data augment
@@ -141,7 +129,6 @@ class CitylostfoundSegmentation_rgb(data.Dataset):
         self.files = {}
 
         self.images_base = os.path.join(self.root, 'leftImg8bit', self.split)
-        self.annotations_base = os.path.join(self.root, 'gtFine', self.split)
 
         self.files[split] = self.recursive_glob(rootdir=self.images_base, suffix='.png')
         self.files[split].sort()
@@ -160,19 +147,7 @@ class CitylostfoundSegmentation_rgb(data.Dataset):
     def __getitem__(self, index):
 
         img_path = self.files[self.split][index].rstrip()
-        _img = Image.open(img_path).convert('RGB')
-        _tmp = np.array(Image.open(lbl_path), dtype=np.uint8)
-        if self.split == 'train':
-            if index < 1036:  # lostandfound
-                _tmp = self.relabel_lostandfound(_tmp)
-            else:  # cityscapes
-                pass
-        elif self.split == 'val':
-            if index < 1203:  # lostandfound
-                _tmp = self.relabel_lostandfound(_tmp)
-            else:  # cityscapes
-                pass
-        _target = Image.fromarray(_tmp)
+        
 
         sample = {'image': _img, 'label': _target}
 
@@ -246,9 +221,6 @@ if __name__ == '__main__':
     for ii, sample in enumerate(dataloader):
         for jj in range(sample["image"].size()[0]):
             img = sample['image'].numpy()
-            gt = sample['label'].numpy()
-            tmp = np.array(gt[jj]).astype(np.uint8)
-            segmap = decode_segmap(tmp, dataset='cityscapes')
             img_tmp = np.transpose(img[jj], axes=[1, 2, 0])
             img_tmp *= (0.229, 0.224, 0.225)
             img_tmp += (0.485, 0.456, 0.406)
