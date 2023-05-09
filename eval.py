@@ -50,7 +50,6 @@ class Validator(object):
 
     def validate(self):
         self.model.eval()
-        self.evaluator.reset()
         tbar = tqdm(self.val_loader, desc='\r')
         for i, (sample, image_name) in enumerate(tbar):
 
