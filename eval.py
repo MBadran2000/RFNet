@@ -25,8 +25,9 @@ class Validator(object):
 
         # Define Dataloader
         kwargs = {'num_workers':args.workers, 'pin_memory': False}
+        print("@"*100)
         print(make_data_loader(args, **kwargs))
-        _, self.val_loader, _, self.num_class = make_data_loader(args, **kwargs)
+        self.val_loader = make_data_loader(args, **kwargs)
         print('un_classes:'+str(self.num_class))
 
         # Define evaluator
