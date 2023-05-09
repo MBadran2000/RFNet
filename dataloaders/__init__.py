@@ -30,7 +30,7 @@ def make_data_loader(args, **kwargs):
             val_loader = DataLoader(val_set, batch_size=args.val_batch_size, shuffle=False, **kwargs)
             test_loader = DataLoader(test_set, batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
-        return train_loader, val_loader, test_loader, num_class
+        return  val_loader, test_loader, num_class
 
     else:
         raise NotImplementedError
