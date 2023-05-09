@@ -30,7 +30,7 @@ class Validator(object):
         self.val_loader = make_data_loader(args, **kwargs)
 
         # Define evaluator
-        self.evaluator = Evaluator(self.num_class)
+       
 
         # Define network
         self.resnet = resnet18(pretrained=True, efficient=False, use_bn= True)
