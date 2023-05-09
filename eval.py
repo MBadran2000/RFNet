@@ -43,7 +43,7 @@ class Validator(object):
 
         # Load weights
         assert os.path.exists(args.weight_path), 'weight-path:{} doesn\'t exit!'.format(args.weight_path)
-        self.new_state_dict = torch.load(os.path.join(args.weight_path, 'model_best.pth'))
+        self.new_state_dict = torch.load(args.weight_path)
 
         self.model = load_my_state_dict(self.model.module, self.new_state_dict['state_dict'])
 
