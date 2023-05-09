@@ -28,7 +28,6 @@ class Validator(object):
         print("@"*100)
         print(make_data_loader(args, **kwargs))
         self.val_loader = make_data_loader(args, **kwargs)
-        print('un_classes:'+str(self.num_class))
 
         # Define evaluator
         self.evaluator = Evaluator(self.num_class)
