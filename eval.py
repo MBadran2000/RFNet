@@ -33,7 +33,7 @@ class Validator(object):
 
         # Define network
         self.resnet = resnet18(pretrained=True, efficient=False, use_bn= True)
-        self.model = RFNet(self.resnet, num_classes=19, use_bn=True)
+        self.model = RFNet(self.resnet, num_classes=20, use_bn=True)
 
         if args.cuda:
             self.model = torch.nn.DataParallel(self.model, device_ids=self.args.gpu_ids)
