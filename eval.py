@@ -25,16 +25,15 @@ class Validator(object):
 
         # Define Dataloader
         kwargs = {'num_workers':args.workers, 'pin_memory': False}
-        print("@"*100)
+        print("@"*)
         print(make_data_loader(args, **kwargs))
         self.val_loader = make_data_loader(args, **kwargs)
 
         # Define evaluator
-       
 
         # Define network
         self.resnet = resnet18(pretrained=True, efficient=False, use_bn= True)
-        self.model = RFNet(self.resnet, num_classes=self.num_class, use_bn=True)
+        self.model = RFNet(self.resnet, num_classes=19, use_bn=True)
 
         if args.cuda:
             self.model = torch.nn.DataParallel(self.model, device_ids=self.args.gpu_ids)
