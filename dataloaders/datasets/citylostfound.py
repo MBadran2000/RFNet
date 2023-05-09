@@ -53,7 +53,7 @@ class CitylostfoundSegmentation(data.Dataset):
         _img = Image.open(img_path).convert('RGB')
         _depth = Image.open(disp_path)
         
-        sample = {'image': _img, 'depth': _depth, 'label': _target}
+        sample = {'image': _img, 'depth': _depth}
 
         # data augment
         if self.split == 'train':
